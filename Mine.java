@@ -93,13 +93,17 @@ public class Mine {
     }
 
     //my attempt to optimize
-    int counter = 0;
     //Add transactions based on transaction weight
-    while(counter < 15) {
+    int counter = 0;
+    int totalNumTrans = numTransactions;
+    if(numTransactions > 16) {
+      totalNumTrans = 16;
+    }
+    while(counter < totalNumTrans) {
       int max = 0;
       int ind = 0;
       for(int i = 0; i < numTransactions; i++) {
-        if(weightedTransactionFees.get(i) > max) {
+        if(weightedTransactionFees.get(i) > max && weightedTransactionFees.get(i) != -1) {
           max = weightedTransactionFees.get(i);
           ind = i;
         }
@@ -147,8 +151,8 @@ public class Mine {
 
   private static String calculateConcatRoot() {
     String stringToHash = "";
-    for(int i=0; i < transactionsInTransactionOrder.size(); i++) {
-      stringToHash +=transactionsInTransactionOrder.get(i).trim();
+    for(int i=0; i < finalTransactions.size(); i++) {
+      stringToHash +=finalTransactions.get(i).trim();
     }
     String concatHash = Sha256Hash.calculateHash(stringToHash);
     return concatHash;
@@ -180,8 +184,8 @@ public class Mine {
   }
 
   private static void printTransactions() {
-    for(int i=0; i<transactionsInTransactionOrder.size(); i++) {
-      System.out.println(transactionsInTransactionOrder.get(i));
+    for(int i=0; i<finalTransactions.size(); i++) {
+      System.out.println(finalTransactions.get(i));
     }
   }
 }
